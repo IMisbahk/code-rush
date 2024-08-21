@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Planner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .planner-container {
+            max-width: 800px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .subject-card {
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .subject-card h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .track-btn {
+            background-color: #2b2b2b;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .track-btn:hover {
+            background-color: #1a1a1a;
+        }
+
+        .delete-subject-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #c0392b;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-subject-btn:hover {
+            background-color: #e74c3c;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background-color: #555;
+        }
+
+        .progress-bar {
+            background-color: #ccc;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 20px;
+            height: 20px;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            width: 0;
+            background-color: #333;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+        }
+
+        .chapter-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .chapter-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .chapter-list .chapter-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .chapter-item label {
+            margin-right: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .chapter-item input[type="date"] {
+            margin-left: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .delete-chapter-btn {
+            background-color: #c0392b;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .delete-chapter-btn:hover {
+            background-color: #e74c3c;
+        }
+
+        .add-chapter-btn,
+        .deadline-btn {
+            background-color: #333;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .add-chapter-btn:hover,
+        .deadline-btn:hover {
+            background-color: #555;
+        }
+
+        .add-subject-btn {
+            background-color: #333;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .add-subject-btn:hover {
+            background-color: #555;
+        }
+
+        .past-deadline {
+            background-color: #f8d7da; /* Red background for missed deadlines */
+        }
+
+        .completed {
+            background-color: #d4edda; /* Light green background for completed tasks */
+        }
+    </style>
+</head>
+<body>
+    <div class="planner-container">
+        <h1>Study Planner</h1>
+        <div id="subject-container"></div>
+        <button class="add-subject-btn" onclick="showAddSubjectPopup()">Add Subject</button>
+    </div>
+
+    <!-- Popup for adding subjects -->
+    <div class="popup-overlay" id="addSubjectPopup">
+        <div class="popup-content">
+            <button class="close-btn" onclick="closeAddSubjectPopup()">Close</button>
+            <h2>Add New Subject</h2>
+            <label for="subjectName">Subject Name:</label>
+            <input type="text" id="subjectName" placeholder="Enter subject name" />
+            <button class="add-chapter-btn" onclick="addNewSubject()">Add Subject</button>
+        </div>
+    </div>
+
+    <!-- Popup for adding chapters -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <button class="close-btn" onclick="closePopup()">Close</button>
+            <h2 id="popupSubjectName">Subject Progress</h2>
+            
+            <div class="progress-bar">
+                <div class="progress-bar-inner" id="progressBarInner">0%</div>
+            </div>
+
+            <div class="chapter-list" id="chapterList"></div>
+
+            <button class="add-chapter-btn" onclick="showAddChapterPopup()">Add Chapter</button>
+        </div>
+    </div>
+
+    <!-- Popup for adding chapters (hidden by default) -->
+    <div class="popup-overlay" id="addChapterPopup">
+        <div class="popup-content">
+            <button class="close-btn" onclick="closeAddChapterPopup()">Close</button>
+            <h2>Add New Chapter</h2>
+            <label for="chapterName">Chapter Name:</label>
+            <input type="text" id="chapterName" placeholder="Enter chapter name" />
+            <label for="chapterDeadline">Deadline:</label>
+            <input type="date" id="chapterDeadline" min="2024-08-21" />
+            <button class="add-chapter-btn" onclick="addChapter()">Add Chapter</button>
+        </div>
+    </div>
+
+    <script>
+        const today = new Date().toISOString().split('T')[0];
+        let currentSubjectCard = null;
+
+        function openPopup(subjectName, subjectCard) {
+            document.getElementById('popupSubjectName').textContent = subjectName + " Progress";
+            document.getElementById('popupOverlay').style.display = 'flex';
+            currentSubjectCard = subjectCard;
+            updateProgress();
+            checkDeadlines();
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+        }
+
+        function showAddSubjectPopup() {
+            document.getElementById('addSubjectPopup').style.display = 'flex';
+        }
+
+        function closeAddSubjectPopup() {
+            document.getElementById('addSubjectPopup').style.display = 'none';
+        }
+
+        function addNewSubject() {
+            const subjectName = document.getElementById('subjectName').value;
+            if (subjectName) {
+                const subjectDiv = document.createElement('div');
+                subjectDiv.className = 'subject-card';
+                subjectDiv.innerHTML = `<h2>${subjectName}</h2>
+                                        <button class="track-btn" onclick="openPopup('${subjectName}', this.closest('.subject-card'))">Track Progress</button>
+                                        <button class="delete-subject-btn" onclick="deleteSubject(this.closest('.subject-card'))">Delete Subject</button>`;
+                document.getElementById('subject-container').appendChild(subjectDiv);
+                closeAddSubjectPopup();
+            }
+        }
+
+        function deleteSubject(subjectCard) {
+            subjectCard.remove();
+        }
+
+        function showAddChapterPopup() {
+            document.getElementById('addChapterPopup').style.display = 'flex';
+        }
+
+        function closeAddChapterPopup() {
+            document.getElementById('addChapterPopup').style.display = 'none';
+        }
+
+        function addChapter() {
+            const chapterName = document.getElementById('chapterName').value;
+            const chapterDeadline = document.getElementById('chapterDeadline').value;
+            if (chapterName && chapterDeadline) {
+                const chapterList = document.getElementById('chapterList');
+                const chapterDiv = document.createElement('div');
+                chapterDiv.className = 'chapter-item';
+                chapterDiv.innerHTML = `<input type="checkbox" onchange="updateProgress()" />
+                                        <label>${chapterName}</label>
+                                        <input type="date" value="${chapterDeadline}" />
+                                        <button class="delete-chapter-btn" onclick="deleteChapter(this.closest('.chapter-item'))">Delete</button>`;
+                chapterList.appendChild(chapterDiv);
+                closeAddChapterPopup();
+                updateProgress();
+            }
+        }
+
+        function deleteChapter(chapterItem) {
+            chapterItem.remove();
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const chapterItems = document.querySelectorAll('.chapter-item');
+            const completedChapters = document.querySelectorAll('.chapter-item input[type="checkbox"]:checked').length;
+            const totalChapters = chapterItems.length;
+            const progress = totalChapters ? (completedChapters / totalChapters) * 100 : 0;
+            document.getElementById('progressBarInner').style.width = progress + '%';
+            document.getElementById('progressBarInner').textContent = Math.round(progress) + '%';
+        }
+
+        function checkDeadlines() {
+            const today = new Date().toISOString().split('T')[0];
+            const chapterDates = document.querySelectorAll('.chapter-item input[type="date"]');
+            chapterDates.forEach(dateInput => {
+                if (dateInput.value < today) {
+                    dateInput.parentElement.classList.add('past-deadline');
+                } else {
+                    dateInput.parentElement.classList.remove('past-deadline');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
