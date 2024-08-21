@@ -6,74 +6,80 @@
     <title>Study Planner</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
         .planner-container {
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
         }
 
         h1 {
             text-align: center;
             color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
         }
 
         .subject-card {
-            background-color: #e0e0e0;
-            border-radius: 15px;
+            background-color: #fafafa;
+            border-radius: 10px;
             padding: 20px;
-            margin: 20px 0;
+            margin-bottom: 20px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             position: relative;
         }
 
         .subject-card h2 {
             margin: 0;
-            font-size: 24px;
-            color: #333;
+            font-size: 22px;
+            color: #444;
         }
 
         .track-btn {
-            background-color: #2b2b2b;
+            background-color: #4caf50; /* Soothing green color */
             color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 12px 24px;
+            border-radius: 8px;
             border: none;
-            margin-top: 20px;
+            margin-top: 15px;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.3s;
         }
 
         .track-btn:hover {
-            background-color: #1a1a1a;
+            background-color: #388e3c;
         }
 
         .delete-subject-btn {
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: #c0392b;
-            color: white;
-            padding: 5px 10px;
+            background-color: #dc3545;
+            color: #fff;
+            padding: 8px 12px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
         }
 
         .delete-subject-btn:hover {
-            background-color: #e74c3c;
+            background-color: #c82333;
         }
 
         .popup-overlay {
@@ -82,20 +88,20 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.6);
             display: none;
             justify-content: center;
             align-items: center;
         }
 
         .popup-content {
-            background-color: #fff;
-            padding: 20px;
+            background-color: #ffffff;
+            padding: 25px;
             border-radius: 10px;
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             position: relative;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         }
 
         .close-btn {
@@ -105,9 +111,11 @@
             background-color: #333;
             color: #fff;
             border: none;
-            padding: 5px 10px;
+            padding: 8px 12px;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
         }
 
         .close-btn:hover {
@@ -115,20 +123,21 @@
         }
 
         .progress-bar {
-            background-color: #ccc;
-            border-radius: 20px;
+            background-color: #e0e0e0;
+            border-radius: 25px;
             overflow: hidden;
             margin-top: 20px;
-            height: 20px;
+            height: 25px;
         }
 
         .progress-bar-inner {
             height: 100%;
             width: 0;
-            background-color: #333;
+            background-color: #4caf50; /* Soothing green color */
             text-align: center;
-            line-height: 20px;
-            color: white;
+            line-height: 25px;
+            color: #fff;
+            font-weight: bold;
         }
 
         .chapter-list {
@@ -137,72 +146,67 @@
         }
 
         .chapter-list input[type="checkbox"] {
-            margin-right: 10px;
+            margin-right: 15px;
         }
 
         .chapter-list .chapter-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .chapter-item label {
-            margin-right: 10px;
-            font-size: 14px;
+            margin-right: 15px;
+            font-size: 16px;
             color: #555;
         }
 
         .chapter-item input[type="date"] {
-            margin-left: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 5px;
             font-size: 14px;
+            margin-left: 10px;
         }
 
         .delete-chapter-btn {
-            background-color: #c0392b;
-            color: white;
+            background-color: #dc3545;
+            color: #fff;
             padding: 5px 10px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-left: 10px;
+            font-size: 14px;
+            transition: background-color 0.3s;
         }
 
         .delete-chapter-btn:hover {
-            background-color: #e74c3c;
+            background-color: #c82333;
         }
 
         .add-chapter-btn,
-        .deadline-btn {
-            background-color: #333;
+        .deadline-btn,
+        .add-subject-btn {
+            background-color: #4caf50; /* Soothing green color */
             color: white;
-            padding: 8px 12px;
+            padding: 10px 15px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 16px;
             margin-top: 10px;
+            transition: background-color 0.3s;
         }
 
         .add-chapter-btn:hover,
-        .deadline-btn:hover {
-            background-color: #555;
-        }
-
-        .add-subject-btn {
-            background-color: #333;
-            color: white;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
+        .deadline-btn:hover,
         .add-subject-btn:hover {
-            background-color: #555;
+            background-color: #388e3c;
         }
 
         .past-deadline {
@@ -262,11 +266,12 @@
     </div>
 
     <script>
-        const today = new Date().toISOString().split('T')[0];
+        const today = '2024-08-21'; // Updated minimum date
+
         let currentSubjectCard = null;
 
         function openPopup(subjectName, subjectCard) {
-            document.getElementById('popupSubjectName').textContent = subjectName + " Progress";
+            document.getElementById('popupSubjectName').textContent = `${subjectName} Progress`;
             document.getElementById('popupOverlay').style.display = 'flex';
             currentSubjectCard = subjectCard;
             updateProgress();
@@ -286,7 +291,7 @@
         }
 
         function addNewSubject() {
-            const subjectName = document.getElementById('subjectName').value;
+            const subjectName = document.getElementById('subjectName').value.trim();
             if (subjectName) {
                 const subjectDiv = document.createElement('div');
                 subjectDiv.className = 'subject-card';
@@ -311,7 +316,7 @@
         }
 
         function addChapter() {
-            const chapterName = document.getElementById('chapterName').value;
+            const chapterName = document.getElementById('chapterName').value.trim();
             const chapterDeadline = document.getElementById('chapterDeadline').value;
             if (chapterName && chapterDeadline) {
                 const chapterList = document.getElementById('chapterList');
@@ -319,11 +324,12 @@
                 chapterDiv.className = 'chapter-item';
                 chapterDiv.innerHTML = `<input type="checkbox" onchange="updateProgress()" />
                                         <label>${chapterName}</label>
-                                        <input type="date" value="${chapterDeadline}" />
+                                        <input type="date" value="${chapterDeadline}" min="2024-08-21" />
                                         <button class="delete-chapter-btn" onclick="deleteChapter(this.closest('.chapter-item'))">Delete</button>`;
                 chapterList.appendChild(chapterDiv);
                 closeAddChapterPopup();
                 updateProgress();
+                checkDeadlines();
             }
         }
 
@@ -337,12 +343,12 @@
             const completedChapters = document.querySelectorAll('.chapter-item input[type="checkbox"]:checked').length;
             const totalChapters = chapterItems.length;
             const progress = totalChapters ? (completedChapters / totalChapters) * 100 : 0;
-            document.getElementById('progressBarInner').style.width = progress + '%';
-            document.getElementById('progressBarInner').textContent = Math.round(progress) + '%';
+            const progressBarInner = document.getElementById('progressBarInner');
+            progressBarInner.style.width = `${progress}%`;
+            progressBarInner.textContent = `${Math.round(progress)}%`;
         }
 
         function checkDeadlines() {
-            const today = new Date().toISOString().split('T')[0];
             const chapterDates = document.querySelectorAll('.chapter-item input[type="date"]');
             chapterDates.forEach(dateInput => {
                 if (dateInput.value < today) {
